@@ -1,22 +1,32 @@
-// import colors from './colors.json';
+import colors from './colors.json';
 
-const startBtn = document.querySelector('[data-action="start"]');
-const stopBtn = document.querySelector('[data-action="stop"]');
-
-startBtn.addEventListener('click', onStartBtnClick);
-stopBtn.addEventListener('click', onStopBtnClick);
-
-const startBtnIntervalId = setInterval(() => console.log('Приветик'), 1000);
-
-function onStartBtnClick() {
-
+const refs = {
+    body: document.body,
+    btnStart: document.querySelector('button[data-action = "start"]'),
+    btnStop: document.querySelector('button[data-action = "stop"]'),
 }
 
-function onStopBtnClick() {
-    clearInterval(startBtnIntervalId);
-};
+const INTERVAL_DELAY = 1000;
+let intervalId = null;
 
+refs.btnStart.addEventListener('click', changeColor);
+refs.btnStop.addEventListener('click', onBtnStop);
 
 const randomIntegerFromInterval = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
 };
+
+function changeColor() {
+    intervalId = setInterval(() => {
+        refs.body.style.backgroundColor = colors[randomIntegerFromInterval(0, colors.length - 1)];
+    }, INTERVAL_DELAY);
+    refs.btnStart.disabled = true;
+    refs.btnStart.classList.add("disabled");
+
+};
+
+function onBtnStop() {
+    clearInterval(intervalId);
+    refs.btnStart.disabled = false;
+    refs.btnStart.classList.remove("disabled");
+}
